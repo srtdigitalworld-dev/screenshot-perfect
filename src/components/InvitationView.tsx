@@ -34,8 +34,14 @@ function useCountdown(date: string) {
   };
 }
 
-const fmtDate = (d: string) =>
-  d ? new Date(d + "T00:00:00").toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long", year: "numeric" }) : "Date to be announced";
+const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const fmtDate = (d: string) => {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(d);
+  if (!m) return "Date to be announced";
+  const dt = new Date(Date.UTC(+m[1]!, +m[2]! - 1, +m[3]!));
+  return `${DAYS[dt.getUTCDay()]}, ${dt.getUTCDate()} ${MONTHS[dt.getUTCMonth()]} ${dt.getUTCFullYear()}`;
+};
 
 export function InvitationView({ content, template, coverUrl, galleryUrls = [], mode, invitationId, compact }: Props) {
   const cd = useCountdown(content.weddingDate);
