@@ -14,13 +14,119 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      invitations: {
+        Row: {
+          content: Json
+          created_at: string
+          id: string
+          owner_id: string
+          published: boolean
+          slug: string
+          template: string
+          updated_at: string
+        }
+        Insert: {
+          content?: Json
+          created_at?: string
+          id?: string
+          owner_id: string
+          published?: boolean
+          slug: string
+          template?: string
+          updated_at?: string
+        }
+        Update: {
+          content?: Json
+          created_at?: string
+          id?: string
+          owner_id?: string
+          published?: boolean
+          slug?: string
+          template?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      rsvps: {
+        Row: {
+          created_at: string
+          guest_count: number
+          guest_name: string
+          id: string
+          invitation_id: string
+          message: string | null
+          phone: string | null
+          responses: Json
+        }
+        Insert: {
+          created_at?: string
+          guest_count?: number
+          guest_name: string
+          id?: string
+          invitation_id: string
+          message?: string | null
+          phone?: string | null
+          responses?: Json
+        }
+        Update: {
+          created_at?: string
+          guest_count?: number
+          guest_name?: string
+          id?: string
+          invitation_id?: string
+          message?: string | null
+          phone?: string | null
+          responses?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rsvps_invitation_id_fkey"
+            columns: ["invitation_id"]
+            isOneToOne: false
+            referencedRelation: "invitations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      wishes: {
+        Row: {
+          author: string
+          created_at: string
+          id: string
+          invitation_id: string
+          message: string
+        }
+        Insert: {
+          author: string
+          created_at?: string
+          id?: string
+          invitation_id: string
+          message: string
+        }
+        Update: {
+          author?: string
+          created_at?: string
+          id?: string
+          invitation_id?: string
+          message?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wishes_invitation_id_fkey"
+            columns: ["invitation_id"]
+            isOneToOne: false
+            referencedRelation: "invitations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_published_invitation: { Args: { _id: string }; Returns: boolean }
+      owns_invitation: { Args: { _id: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
