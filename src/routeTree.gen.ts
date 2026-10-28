@@ -21,6 +21,9 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as TemplatesRouteImport } from './routes/templates'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as DemoTemplateIdRouteImport } from './routes/demo.$templateId'
+import { Route as ISlugRouteImport } from './routes/i.$slug'
+import { Route as AuthenticatedEditIdRouteImport } from './routes/_authenticated/edit.$id'
+import { Route as AuthenticatedRsvpsIdRouteImport } from './routes/_authenticated/rsvps.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -81,6 +84,21 @@ const DemoTemplateIdRoute = DemoTemplateIdRouteImport.update({
   path: '/demo/$templateId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ISlugRoute = ISlugRouteImport.update({
+  id: '/i/$slug',
+  path: '/i/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedEditIdRoute = AuthenticatedEditIdRouteImport.update({
+  id: '/edit/$id',
+  path: '/edit/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedRsvpsIdRoute = AuthenticatedRsvpsIdRouteImport.update({
+  id: '/rsvps/$id',
+  path: '/rsvps/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -94,6 +112,9 @@ export interface FileRoutesByFullPath {
   '/templates': typeof TemplatesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/demo/$templateId': typeof DemoTemplateIdRoute
+  '/i/$slug': typeof ISlugRoute
+  '/edit/$id': typeof AuthenticatedEditIdRoute
+  '/rsvps/$id': typeof AuthenticatedRsvpsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -107,6 +128,9 @@ export interface FileRoutesByTo {
   '/templates': typeof TemplatesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/demo/$templateId': typeof DemoTemplateIdRoute
+  '/i/$slug': typeof ISlugRoute
+  '/edit/$id': typeof AuthenticatedEditIdRoute
+  '/rsvps/$id': typeof AuthenticatedRsvpsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -122,6 +146,9 @@ export interface FileRoutesById {
   '/templates': typeof TemplatesRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/demo/$templateId': typeof DemoTemplateIdRoute
+  '/i/$slug': typeof ISlugRoute
+  '/_authenticated/edit/$id': typeof AuthenticatedEditIdRoute
+  '/_authenticated/rsvps/$id': typeof AuthenticatedRsvpsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -137,6 +164,9 @@ export interface FileRouteTypes {
     | '/templates'
     | '/dashboard'
     | '/demo/$templateId'
+    | '/i/$slug'
+    | '/edit/$id'
+    | '/rsvps/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -150,6 +180,9 @@ export interface FileRouteTypes {
     | '/templates'
     | '/dashboard'
     | '/demo/$templateId'
+    | '/i/$slug'
+    | '/edit/$id'
+    | '/rsvps/$id'
   id:
     | '__root__'
     | '/'
@@ -164,6 +197,9 @@ export interface FileRouteTypes {
     | '/templates'
     | '/_authenticated/dashboard'
     | '/demo/$templateId'
+    | '/i/$slug'
+    | '/_authenticated/edit/$id'
+    | '/_authenticated/rsvps/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -178,6 +214,7 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   TemplatesRoute: typeof TemplatesRoute
   DemoTemplateIdRoute: typeof DemoTemplateIdRoute
+  ISlugRoute: typeof ISlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -266,15 +303,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoTemplateIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/i/$slug': {
+      id: '/i/$slug'
+      path: '/i/$slug'
+      fullPath: '/i/$slug'
+      preLoaderRoute: typeof ISlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/edit/$id': {
+      id: '/_authenticated/edit/$id'
+      path: '/edit/$id'
+      fullPath: '/edit/$id'
+      preLoaderRoute: typeof AuthenticatedEditIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/rsvps/$id': {
+      id: '/_authenticated/rsvps/$id'
+      path: '/rsvps/$id'
+      fullPath: '/rsvps/$id'
+      preLoaderRoute: typeof AuthenticatedRsvpsIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedEditIdRoute: typeof AuthenticatedEditIdRoute
+  AuthenticatedRsvpsIdRoute: typeof AuthenticatedRsvpsIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedEditIdRoute: AuthenticatedEditIdRoute,
+  AuthenticatedRsvpsIdRoute: AuthenticatedRsvpsIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -292,6 +354,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   TemplatesRoute: TemplatesRoute,
   DemoTemplateIdRoute: DemoTemplateIdRoute,
+  ISlugRoute: ISlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
