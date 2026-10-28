@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
+import { parseContent } from "@/lib/templates";
 
 export const getPublishedInvitation = createServerFn({ method: "GET" })
   .inputValidator((input: { slug: string }) => ({ slug: String(input.slug).slice(0, 80) }))
@@ -18,5 +19,5 @@ export const getPublishedInvitation = createServerFn({ method: "GET" })
       },
     });
     const { data: row } = await client.from("invitations").select("id, slug, template, content").eq("slug", data.slug).eq("published", true).maybeSingle();
-    return row ? { id: row.id, slug: row.slug, template: row.template, content: row.content as unknown } : null;
+    return row ? { id: row.id, slug: row.slug, template: row.template, content: parseContent(row.content) } : null;
   });

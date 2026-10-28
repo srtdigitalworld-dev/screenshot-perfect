@@ -39,7 +39,7 @@ function Guest() {
       mode="live"
       invitationId={inv.id}
       coverUrl={content.coverPath ? urls[content.coverPath] : undefined}
-      galleryUrls={content.gallery.map((p) => urls[p]).filter(Boolean)}
+      galleryUrls={content.gallery.map((p) => urls[p]).filter((u): u is string => !!u)}
     />
   );
 }

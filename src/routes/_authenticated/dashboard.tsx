@@ -34,7 +34,7 @@ function Dashboard() {
 
   async function create(e: React.FormEvent) {
     e.preventDefault();
-    if (!bride.trim() || !groom.trim()) return toast.error("Enter both names");
+    if (!bride.trim() || !groom.trim()) return void toast.error("Enter both names");
     setBusy(true);
     const base = slugify(`${bride}-${groom}`) || "our-wedding";
     const content = { ...emptyContent(), bride: bride.trim(), groom: groom.trim() };
@@ -42,7 +42,7 @@ function Dashboard() {
     for (let i = 0; i < 5; i++) {
       const { data, error } = await supabase.from("invitations").insert({ owner_id: user.id, slug, template, content: content as never }).select("id").single();
       if (!error && data) { setBusy(false); navigate({ to: "/edit/$id", params: { id: data.id } }); return; }
-      if (error?.code !== "23505") { setBusy(false); return toast.error(error?.message ?? "Could not create"); }
+      if (error?.code !== "23505") { setBusy(false); return void toast.error(error?.message ?? "Could not create"); }
       slug = `${base}-${Math.floor(Math.random() * 900 + 100)}`;
     }
     setBusy(false);

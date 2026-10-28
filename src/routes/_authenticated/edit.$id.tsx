@@ -55,11 +55,11 @@ function Editor() {
 
   async function save(nextPublished = published) {
     const clean = slugify(slug);
-    if (!clean) return toast.error("Choose a link name");
+    if (!clean) return void toast.error("Choose a link name");
     setSaving(true);
     const { error } = await supabase.from("invitations").update({ content: content as never, template: templateId, slug: clean, published: nextPublished }).eq("id", id);
     setSaving(false);
-    if (error) return toast.error(error.code === "23505" ? "That link name is taken — try another" : error.message);
+    if (error) return void toast.error(error.code === "23505" ? "That link name is taken — try another" : error.message);
     setSlug(clean);
     setPublished(nextPublished);
     toast.success(nextPublished ? "Saved — your invitation is live" : "Saved");
@@ -186,7 +186,7 @@ function Editor() {
         <aside className="lg:sticky lg:top-20 lg:self-start">
           <p className="mb-2 text-center text-xs uppercase tracking-widest text-muted-foreground">Live phone preview</p>
           <div className="mx-auto h-[760px] w-[375px] max-w-full overflow-y-auto rounded-[2.5rem] border-8 border-foreground shadow-soft">
-            <InvitationView compact content={content} template={getTemplate(templateId)} mode="preview" coverUrl={content.coverPath ? urls[content.coverPath] : undefined} galleryUrls={content.gallery.map((p) => urls[p]).filter(Boolean)} />
+            <InvitationView compact content={content} template={getTemplate(templateId)} mode="preview" coverUrl={content.coverPath ? urls[content.coverPath] : undefined} galleryUrls={content.gallery.map((p) => urls[p]).filter((u): u is string => !!u)} />
           </div>
         </aside>
       </div>

@@ -21,7 +21,7 @@ export const TEMPLATES: Template[] = [
   { id: "south", name: "Kanjivaram", religion: "South Indian", style: "Traditional", tier: "Luxury", price: 1499, themeClass: "theme-south", tagline: "Silk purple and temple gold" },
 ];
 
-export const getTemplate = (id: string) => TEMPLATES.find((t) => t.id === id) ?? TEMPLATES[0];
+export const getTemplate = (id: string) => TEMPLATES.find((t) => t.id === id) ?? TEMPLATES[0]!;
 
 export interface InviteEvent {
   id: string;

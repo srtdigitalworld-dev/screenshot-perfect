@@ -10,11 +10,11 @@ type Mode = "live" | "demo" | "preview";
 interface Props {
   content: InviteContent;
   template: Template;
-  coverUrl?: string;
-  galleryUrls?: string[];
+  coverUrl?: string | undefined;
+  galleryUrls?: string[] | undefined;
   mode: Mode;
-  invitationId?: string;
-  compact?: boolean;
+  invitationId?: string | undefined;
+  compact?: boolean | undefined;
 }
 
 function useCountdown(date: string) {
@@ -130,7 +130,7 @@ export function InvitationView({ content, template, coverUrl, galleryUrls = [], 
 
 const field = "w-full rounded-lg border border-inv-accent/30 bg-inv-bg/60 px-3 py-2 text-inv-fg placeholder:text-inv-muted/70 focus:outline-none focus:ring-2 focus:ring-inv-accent";
 
-function RsvpForm({ content, mode, invitationId, sec }: { content: InviteContent; mode: Mode; invitationId?: string; sec: string }) {
+function RsvpForm({ content, mode, invitationId, sec }: { content: InviteContent; mode: Mode; invitationId?: string | undefined; sec: string }) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [count, setCount] = useState(1);
@@ -141,7 +141,7 @@ function RsvpForm({ content, mode, invitationId, sec }: { content: InviteContent
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (!name.trim()) return toast.error("Please enter your name");
+    if (!name.trim()) return void toast.error("Please enter your name");
     if (mode !== "live" || !invitationId) {
       setDone(true);
       toast.success(mode === "demo" ? "Demo RSVP — this is how guests will reply!" : "Preview only");
@@ -157,7 +157,7 @@ function RsvpForm({ content, mode, invitationId, sec }: { content: InviteContent
       message: message.trim().slice(0, 1000) || null,
     });
     setBusy(false);
-    if (error) return toast.error("Could not send RSVP. Please try again.");
+    if (error) return void toast.error("Could not send RSVP. Please try again.");
     setDone(true);
   }
 
@@ -200,7 +200,7 @@ function RsvpForm({ content, mode, invitationId, sec }: { content: InviteContent
 
 interface Wish { id: string; author: string; message: string }
 
-function Wishes({ mode, invitationId, sec }: { mode: Mode; invitationId?: string; sec: string }) {
+function Wishes({ mode, invitationId, sec }: { mode: Mode; invitationId?: string | undefined; sec: string }) {
   const [wishes, setWishes] = useState<Wish[]>(
     mode === "live" ? [] : [
       { id: "1", author: "Riya Masi", message: "Bahut bahut badhai! Can't wait to dance at the Sangeet 💃" },
@@ -219,10 +219,10 @@ function Wishes({ mode, invitationId, sec }: { mode: Mode; invitationId?: string
   async function post(e: React.FormEvent) {
     e.preventDefault();
     const a = author.trim().slice(0, 80), m = message.trim().slice(0, 500);
-    if (!a || !m) return toast.error("Please add your name and a wish");
+    if (!a || !m) return void toast.error("Please add your name and a wish");
     if (mode === "live" && invitationId) {
       const { data, error } = await supabase.from("wishes").insert({ invitation_id: invitationId, author: a, message: m }).select("id, author, message").single();
-      if (error || !data) return toast.error("Could not post your wish");
+      if (error || !data) return void toast.error("Could not post your wish");
       setWishes((w) => [data, ...w]);
     } else {
       setWishes((w) => [{ id: String(Date.now()), author: a, message: m }, ...w]);
